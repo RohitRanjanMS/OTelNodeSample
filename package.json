@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "build": "pnpm typecheck && pnpm tooling:package:code""start": "func start",
+    "test": "echo \"No tests yet...\"",
+    "tooling:package:code": "node tooling/artifact/package.js"
   },
   "dependencies": {
     "@azure/functions": "^4.0.0",
