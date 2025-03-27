@@ -6,9 +6,6 @@ export async function packageArtifact(appDir, packagePath) {
   // The directory in which this script is located
 
   let isCI = false;
-  if (process.env.CI) {
-    isCI = true;
-  }
 
   const packageDir = `${appDir}/${packagePath}`;
 
@@ -30,15 +27,15 @@ export async function packageArtifact(appDir, packagePath) {
   }
 
   const bannerJs = [
-    "const __dirname = import.meta.dirname;",
-    'const __filename=(await import("node:url")).fileURLToPath(import.meta.url);',
-    'import { createRequire as topLevelCreateRequire } from "module";',
-    "const require = topLevelCreateRequire(import.meta.url);",
+    // "const __dirname = import.meta.dirname;",
+    // 'const __filename=(await import("node:url")).fileURLToPath(import.meta.url);',
+    // 'import { createRequire as topLevelCreateRequire } from "module";',
+    // "const require = topLevelCreateRequire(import.meta.url);",
   ].join("");
 
   const appId = packageJson.name.replace("@gradientedge/keystone-app-", "");
 
-  let srcFile = `src/${sourceFileName}.ts`;
+  let srcFile = `dist/${sourceFileName}.js`;
 
   if (
     fs.existsSync(`${packageDir}/src/${sourceFileName}-${cloudProvider}.ts`)
@@ -52,7 +49,7 @@ export async function packageArtifact(appDir, packagePath) {
   } else {
     outDir = `${packageDir}/.artifacts/local`;
   }
-  const outfile = `${outDir}/index.mjs`;
+  const outfile = `${outDir}/index.cjs`;
 
   console.log("Building package:", chalk.greenBright(packageJson.name));
   console.log(
@@ -65,12 +62,12 @@ export async function packageArtifact(appDir, packagePath) {
     entryPoints: [`${packageDir}/${srcFile}`],
     bundle: true,
     sourcemap: true,
-    sourcesContent: !isCI, // Only required when you're debugging with an IDE
-    minify: true,
-    keepNames: false,
+    sourcesContent: true,
+    minify: false,
+    keepNames: true,
     platform: "node",
     target: "node20",
-    format: "esm",
+    format: "cjs",
     banner: {
       js: bannerJs,
     },
@@ -79,37 +76,37 @@ export async function packageArtifact(appDir, packagePath) {
   });
 
   await esbuild.build({
-    entryPoints: [`${packageDir}/src/functions/httpTrigger1.ts`],
+    entryPoints: [`${packageDir}/dist/functions/httpTrigger1.js`],
     bundle: true,
     sourcemap: true,
-    sourcesContent: !isCI, // Only required when you're debugging with an IDE
-    minify: true,
-    keepNames: false,
+    sourcesContent: true,
+    minify: false,
+    keepNames: true,
     platform: "node",
     target: "node20",
-    format: "esm",
+    format: "cjs",
     banner: {
       js: bannerJs,
     },
     external: ["@azure/functions-core"],
-    outfile: `${outDir}/functions/httpTrigger1.mjs`,
+    outfile: `${outDir}/functions/httpTrigger1.cjs`,
   });
 
   await esbuild.build({
-    entryPoints: [`${packageDir}/src/functions/httpTrigger2.ts`],
+    entryPoints: [`${packageDir}/dist/functions/httpTrigger2.js`],
     bundle: true,
     sourcemap: true,
-    sourcesContent: !isCI, // Only required when you're debugging with an IDE
-    minify: true,
+    sourcesContent: true,
+    minify: false,
     keepNames: false,
     platform: "node",
     target: "node20",
-    format: "esm",
+    format: "cjs",
     banner: {
       js: bannerJs,
     },
     external: ["@azure/functions-core"],
-    outfile: `${outDir}/functions/httpTrigger2.mjs`,
+    outfile: `${outDir}/functions/httpTrigger2.cjs`,
   });
 
   if (isCI && cloudProvider === "azure") {
