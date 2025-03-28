@@ -1,0 +1,28 @@
+{
+  "name": "@gradientedge/tooling-artifacts",
+  "version": "0.0.0",
+  "description": "Tooling for working with code artifacts",
+  "license": "UNLICENSED",
+  "author": "Gradient Edge <info@gradientedge.com>",
+  "homepage": "https://github.com/gradientedge/keystone-services#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gradientedge/keystone-services.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gradientedge/keystone-services/issues"
+  },
+  "type": "module",
+  "private": true,
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "!dist/**/__tests__"
+  ],
+  "dependencies": {
+    "@parcel/watcher": "2.5.1",
+    "chalk": "5.4.1",
+    "esbuild": "0.25.1",
+    "yargs": "17.7.2"
+  }
+}

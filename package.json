@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "test": "echo \"No tests yet...\"",
+    "build": "node tooling/artifact/package.js"
   },
   "dependencies": {
     "@azure/functions": "^4.0.0",
@@ -12,7 +13,12 @@
     "@azure/monitor-opentelemetry-exporter": "^1.0.0-beta.27",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.53.0",
-    "axios": "^1.7.8"
+    "axios": "^1.7.8",
+    "chalk": "^5.4.1"
   },
-  "main": "src/{index.js,functions/*.js}"
+  "devDependencies": {
+    "esbuild": "0.25.1"
+  },
+  "main": ".artifacts/local/{index.mjs,functions/*.mjs}",
+  "packageManager": "pnpm@8.15.9+sha256.daa27a0b541bc635323ff96c2ded995467ff9fe6d69ff67021558aa9ad9dcc36"
 }
