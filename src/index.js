@@ -1,13 +1,13 @@
-const { app } = require('@azure/functions');
-const http = require('https');
-const { AzureFunctionsInstrumentation } = require('@azure/functions-opentelemetry-instrumentation');
-const { AzureMonitorLogExporter, AzureMonitorTraceExporter } = require('@azure/monitor-opentelemetry-exporter');
-const { getNodeAutoInstrumentations, getResourceDetectors } = require('@opentelemetry/auto-instrumentations-node');
-const { registerInstrumentations } = require('@opentelemetry/instrumentation');
-const { detectResourcesSync } = require('@opentelemetry/resources');
-const { LoggerProvider, SimpleLogRecordProcessor } = require('@opentelemetry/sdk-logs');
-const { NodeTracerProvider, SimpleSpanProcessor } = require('@opentelemetry/sdk-trace-node');
-const { trace, context } = require('@opentelemetry/api');
+import { app } from '@azure/functions';
+import http from 'https';
+import azureInstrumentation from '@azure/functions-opentelemetry-instrumentation';
+import { AzureMonitorLogExporter, AzureMonitorTraceExporter } from '@azure/monitor-opentelemetry-exporter';
+import { getNodeAutoInstrumentations, getResourceDetectors } from '@opentelemetry/auto-instrumentations-node';
+import { registerInstrumentations } from '@opentelemetry/instrumentation';
+import { detectResourcesSync } from '@opentelemetry/resources';
+import { LoggerProvider, SimpleLogRecordProcessor } from '@opentelemetry/sdk-logs';
+import { NodeTracerProvider, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-node';
+import { trace, context } from '@opentelemetry/api';
 const resource = detectResourcesSync({ detectors: getResourceDetectors() });
 const tracerProvider = new NodeTracerProvider({ resource });
 
@@ -18,11 +18,11 @@ const loggerProvider = new LoggerProvider({ resource });
 loggerProvider.addLogRecordProcessor(new SimpleLogRecordProcessor(new AzureMonitorLogExporter()));
 
 registerInstrumentations({
-    tracerProvider,
-    loggerProvider,
-    instrumentations: [getNodeAutoInstrumentations(), new AzureFunctionsInstrumentation()],
+  tracerProvider,
+  loggerProvider,
+  instrumentations: [getNodeAutoInstrumentations(), new azureInstrumentation.AzureFunctionsInstrumentation()],
 });
 
 app.setup({
-    enableHttpStream: true,
+  enableHttpStream: true,
 });
