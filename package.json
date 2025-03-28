@@ -23,5 +23,5 @@
     "esbuild": "0.25.1",
     "typescript": "5.8.2"
   },
-  "main": "dist/{index.js,functions/*.js}"
+  "main": ".artifacts/local/{index.cjs,functions/*.cjs}"
 }
